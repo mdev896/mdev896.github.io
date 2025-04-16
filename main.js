@@ -97,6 +97,18 @@ let btd4 = objectGenerator(
     "bloons-tower-defense-4-expansion"
 );
 
+let evowarsio = objectGenerator("/evowarsio", "evowarsio.png", "evowarsio");
+
+let sap = objectGenerator(
+    "/super-auto-pets",
+    "super-auto-pets.png",
+    "super-auto-pets"
+);
+
+let stick_war = objectGenerator("/stick-war", "stick-war.png", "stick-war");
+
+let hobo = objectGenerator("/hobo", "hobo.png", "hobo");
+
 let mainComponents = [
     sandalsComponent,
     gunmayhemComponent,
@@ -108,6 +120,10 @@ let mainComponents = [
     sr.component,
     madness.component,
     btd4.component,
+    evowarsio.component,
+    sap.component,
+    stick_war.component,
+    hobo.component,
 ];
 
 let sandalsComponents = [ss1.component, ss2.component, ss3.component];
@@ -184,6 +200,18 @@ function refresh(newPage) {
             break;
         case "/btd4":
             main.components = [btd4.game];
+            break;
+        case "/evowarsio":
+            main.components = [evowarsio.game];
+            break;
+        case "/super-auto-pets":
+            main.components = [sap.game];
+            break;
+        case "/stick-war":
+            main.components = [stick_war.game];
+            break;
+        case "/hobo":
+            main.components = [hobo];
             break;
     }
     let urlState = { url: url };
