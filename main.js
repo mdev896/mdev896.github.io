@@ -46,14 +46,10 @@ function objectGenerator(link, image, game) {
         game: gameComponentGenerator(
             "https://www.crazygames.com/embed/" + game
         ),
+        url: link,
     };
     return obj;
 }
-
-let sandalsComponent = finalGenerator(
-    "onclick=\"redirect('/sandals')\"",
-    "images/sANDs.jpg"
-);
 
 let ss1 = objectGenerator("/sandals1", "sANDs.jpg", "swords-and-sandals-1");
 
@@ -61,19 +57,9 @@ let ss2 = objectGenerator("/sandals2", "ss2.jpg", "swords-and-sandals-2");
 
 let ss3 = objectGenerator("/sandals3", "ss3.jpg", "swords-and-sandals-3");
 
-let gunmayhemComponent = finalGenerator(
-    "onclick=\"redirect('/gunmayhem')\"",
-    "images/gun_mayhem.jpg"
-);
-
 let mayhem1 = objectGenerator("/mayhem1", "gun_mayhem.jpg", "gun-mayhem");
 
 let mayhem2 = objectGenerator("/mayhem2", "gun_mayhem2.jpg", "gun-mayhem-2");
-
-let aowComponent = finalGenerator(
-    "onclick=\"redirect('/aow')\"",
-    "images/aow.jpg"
-);
 
 let aow1 = objectGenerator("/aow1", "aow.jpg", "age-of-war");
 
@@ -109,22 +95,31 @@ let stick_war = objectGenerator("/stick-war", "stick-war.png", "stick-war");
 
 let hobo = objectGenerator("/hobo", "hobo.png", "hobo");
 
-let mainComponents = [
-    sandalsComponent,
-    gunmayhemComponent,
-    aowComponent,
-    jacksmith.component,
-    murder.component,
-    bar.component,
-    ragdoll.component,
-    sr.component,
-    madness.component,
-    btd4.component,
-    evowarsio.component,
-    sap.component,
-    stick_war.component,
-    hobo.component,
+let games = [
+    mayhem1,
+    mayhem2,
+    aow1,
+    aow2,
+    ss1,
+    ss2,
+    ss3,
+    jacksmith,
+    murder,
+    bar,
+    ragdoll,
+    sr,
+    madness,
+    btd4,
+    evowarsio,
+    sap,
+    stick_war,
+    hobo,
 ];
+
+let mainComponents = [];
+games.forEach((e) => {
+    mainComponents.push(e.component);
+});
 
 let sandalsComponents = [ss1.component, ss2.component, ss3.component];
 let mayhemComponents = [mayhem1.component, mayhem2.component];
@@ -146,74 +141,13 @@ function setPage() {
 }
 
 function refresh(newPage) {
-    switch (url) {
-        case "/":
-            main.components = mainComponents;
-            break;
-        case "/gunmayhem":
-            main.components = mayhemComponents;
-            break;
-        case "/mayhem1":
-            main.components = [mayhem1.game];
-            break;
-        case "/mayhem2":
-            main.components = [mayhem2.game];
-            break;
-        case "/aow":
-            main.components = aowComponents;
-            break;
-        case "/aow1":
-            main.components = [aow1.game];
-            break;
-        case "/aow2":
-            main.components = [aow2.game];
-            break;
-        case "/sandals":
-            main.components = sandalsComponents;
-            break;
-        case "/sandals1":
-            main.components = [ss1.game];
-            break;
-        case "/sandals2":
-            main.components = [ss2.game];
-            break;
-        case "/sandals3":
-            main.components = [ss3.game];
-            break;
-        case "/jacksmith":
-            main.components = [jacksmith.game];
-            break;
-        case "/murder":
-            main.components = [murder.game];
-            break;
-        case "/bar":
-            main.components = [bar.game];
-            break;
-        case "/ragdoll":
-            main.components = [ragdoll.game];
-            break;
-        case "/sr":
-            main.components = [sr.game];
-            break;
-        case "/mdns":
-            main.components = [madness.game];
-            break;
-        case "/btd4":
-            main.components = [btd4.game];
-            break;
-        case "/evowarsio":
-            main.components = [evowarsio.game];
-            break;
-        case "/super-auto-pets":
-            main.components = [sap.game];
-            break;
-        case "/stick-war":
-            main.components = [stick_war.game];
-            break;
-        case "/hobo":
-            main.components = [hobo];
-            break;
-    }
+    if (url == "/") main.components = mainComponents;
+    else
+        games.forEach((e) => {
+            if (url == e.url) {
+                main.components = [e.game];
+            }
+        });
     let urlState = { url: url };
     if (!newPage) history.pushState(urlState, "");
     setPage();
