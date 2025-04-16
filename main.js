@@ -16,54 +16,18 @@ class component {
         }
         this.text += "</" + this.tag + ">";
     }
-    getText() {
-        return this.text;
-    }
 }
-function gameLinkGenerator(gametext, redirect) {
+function gameComponentGenerator(gameUrl) {
+    return new component(null, null, null, gameFrameGenerator(gameUrl));
+}
+function gameFrameGenerator(gameUrl) {
     return (
-        `<iframe
-            id="game-iframe"
-            src="` +
-        gametext +
-        `"
-            title="game"
-            scrolling="no"
-            allow="fullscreen; screen-wake-lock; gamepad; clipboard-read"
-            allowfullscreen=""
-            sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-scripts allow-same-origin allow-downloads  allow-popups allow-popups-to-escape-sandbox"
-            loading="eager"
-            importance="high"
-            data-hj-allow-iframe="true"
-            style="
-                border: 0px;
-                margin: 0px;
-                padding: 0px;
-                width: 100%;
-                height: 90%;
-                position: absolute;
-                top: 0px;
-                left: 0px;
-            "
-        ></iframe>
-        <br /><a
-            onclick=redirect('` +
-        redirect +
-        `')
-            style="
-                position: absolute;
-                top: 90%;
-                bottom: 0;
-                left: 48%;
-                right: 48%;
-            "
-            ><img
-                src="images/return2.png"
-                style="height: 100%; width: 100%"
-        /></a>`
+        '<iframe src="' +
+        gameUrl +
+        '" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0" frameborder="0" allow="gamepad *;"></iframe>'
     );
 }
-function finalGenerator(link = null, image = null) {
+function finalGenerator(link, image) {
     let imgComponent = new component(
         "img",
         'src="' + image + '" class="img"',
@@ -73,166 +37,86 @@ function finalGenerator(link = null, image = null) {
     let divComponent = new component("div", "", [divLink]);
     return divComponent;
 }
-
-let returnComponent = finalGenerator(
-    "onclick=\"redirect('/')\"",
-    "images/return.png"
-);
+function objectGenerator(link, image, game) {
+    let obj = {
+        component: finalGenerator(
+            "onclick=\"redirect('" + link + "')\"",
+            "images/" + image
+        ),
+        game: gameComponentGenerator(
+            "https://www.crazygames.com/embed/" + game
+        ),
+    };
+    return obj;
+}
 
 let sandalsComponent = finalGenerator(
     "onclick=\"redirect('/sandals')\"",
     "images/sANDs.jpg"
 );
 
-let sandals1Component = finalGenerator(
-    "onclick=\"redirect('/sandals1')\"",
-    "images/sANDs.jpg"
-);
+let ss1 = objectGenerator("/sandals1", "sANDs.jpg", "swords-and-sandals-1");
 
-let ss1game = new component(
-    null,
-    null,
-    null,
-    gameLinkGenerator(
-        "https://games.crazygames.com/en_US/swords-and-sandals-1/index.html?v=1.309",
-        "/sandals"
-    )
-);
+let ss2 = objectGenerator("/sandals2", "ss2.jpg", "swords-and-sandals-2");
 
-let sandals2Component = finalGenerator(
-    "onclick=\"redirect('/sandals2')\"",
-    "images/ss2.jpg"
-);
-
-let ss2game = new component(
-    null,
-    null,
-    null,
-    gameLinkGenerator(
-        "https://games.crazygames.com/en_US/swords-and-sandals-2/index.html?v=1.309",
-        "/sandals"
-    )
-);
-
-let sandals3Component = finalGenerator(
-    "onclick=\"redirect('/sandals3')\"",
-    "images/ss3.jpg"
-);
-
-let ss3game = new component(
-    null,
-    null,
-    null,
-    gameLinkGenerator(
-        "https://games.crazygames.com/en_US/swords-and-sandals-3/index.html?v=1.309",
-        "/sandals"
-    )
-);
+let ss3 = objectGenerator("/sandals3", "ss3.jpg", "swords-and-sandals-3");
 
 let gunmayhemComponent = finalGenerator(
     "onclick=\"redirect('/gunmayhem')\"",
     "images/gun_mayhem.jpg"
 );
 
-let mayhem1Component = finalGenerator(
-    "onclick=\"redirect('/mayhem1')\"",
-    "images/gun_mayhem.jpg"
-);
+let mayhem1 = objectGenerator("/mayhem1", "gun_mayhem.jpg", "gun-mayhem");
 
-let mayhem1game = new component(
-    null,
-    null,
-    null,
-    gameLinkGenerator(
-        "https://games.crazygames.com/en_US/gun-mayhem/index.html?v=1.309",
-        "/gunmayhem"
-    )
-);
-
-let mayhem2Component = finalGenerator(
-    "onclick=\"redirect('/mayhem2')\"",
-    "images/gun_mayhem2.jpg"
-);
-
-let mayhem2game = new component(
-    null,
-    null,
-    null,
-    gameLinkGenerator(
-        "https://games.crazygames.com/en_US/gun-mayhem-2/index.html?v=1.309",
-        "/gunmayhem"
-    )
-);
+let mayhem2 = objectGenerator("/mayhem2", "gun_mayhem2.jpg", "gun-mayhem-2");
 
 let aowComponent = finalGenerator(
     "onclick=\"redirect('/aow')\"",
     "images/aow.jpg"
 );
 
-let aow1Component = finalGenerator(
-    "onclick=\"redirect('/aow1')\"",
-    "images/aow.jpg"
-);
+let aow1 = objectGenerator("/aow1", "aow.jpg", "age-of-war");
 
-let aow1game = new component(
-    null,
-    null,
-    null,
-    gameLinkGenerator(
-        "https://games.crazygames.com/en_US/age-of-war/index.html?v=1.309",
-        "/aow"
-    )
-);
+let aow2 = objectGenerator("/aow2", "aow2.jpg", "age-of-war-2");
 
-let aow2Component = finalGenerator(
-    "onclick=\"redirect('/aow2')\"",
-    "images/aow2.jpg"
-);
+let jacksmith = objectGenerator("/jacksmith", "jacksmith.jpg", "jacksmith");
 
-let aow2game = new component(
-    null,
-    null,
-    null,
-    gameLinkGenerator(
-        "https://games.crazygames.com/en_US/age-of-war-2/index.html?v=1.309",
-        "/aow"
-    )
-);
+let murder = objectGenerator("/murder", "murder.png", "murder");
 
-let jacksmithComponent = finalGenerator(
-    "onclick=\"redirect('/jacksmith')\"",
-    "images/jacksmith.jpg"
-);
+let bar = objectGenerator("/bar", "bar.png", "bartender-the-right-mix");
 
-let jacksmithGame = new component(
-    null,
-    null,
-    null,
-    gameLinkGenerator(
-        "https://games.crazygames.com/en_US/jacksmith/index.html?v=1.309",
-        "/"
-    )
+let ragdoll = objectGenerator("/ragdoll", "ragdoll.png", "ragdoll-archers");
+
+let sr = objectGenerator("/sr", "sr.png", "soccer-random");
+
+let madness = objectGenerator("/mdns", "mdns.png", "madness-project-nexus");
+
+let btd4 = objectGenerator(
+    "/btd4",
+    "btd4.png",
+    "bloons-tower-defense-4-expansion"
 );
 
 let mainComponents = [
     sandalsComponent,
     gunmayhemComponent,
     aowComponent,
-    jacksmithComponent,
+    jacksmith.component,
+    murder.component,
+    bar.component,
+    ragdoll.component,
+    sr.component,
+    madness.component,
+    btd4.component,
 ];
 
-let sandalsComponents = [
-    sandals1Component,
-    sandals2Component,
-    sandals3Component,
-    returnComponent,
-];
-let mayhemComponents = [mayhem1Component, mayhem2Component, returnComponent];
-let aowComponents = [aow1Component, aow2Component, returnComponent];
+let sandalsComponents = [ss1.component, ss2.component, ss3.component];
+let mayhemComponents = [mayhem1.component, mayhem2.component];
+let aowComponents = [aow1.component, aow2.component];
 
 let main = new component("div", 'class="main"', mainComponents);
 let url = "/";
-let currentHTML = main.getText();
+let currentHTML = main.text;
 
 function redirect(newURL) {
     url = newURL;
@@ -241,7 +125,7 @@ function redirect(newURL) {
 
 function setPage() {
     main.componentText();
-    currentHTML = main.getText();
+    currentHTML = main.text;
     document.getElementById("root").innerHTML = currentHTML;
 }
 
@@ -254,34 +138,52 @@ function refresh(newPage) {
             main.components = mayhemComponents;
             break;
         case "/mayhem1":
-            main.components = [mayhem1game];
+            main.components = [mayhem1.game];
             break;
         case "/mayhem2":
-            main.components = [mayhem2game];
+            main.components = [mayhem2.game];
             break;
         case "/aow":
             main.components = aowComponents;
             break;
         case "/aow1":
-            main.components = [aow1game];
+            main.components = [aow1.game];
             break;
         case "/aow2":
-            main.components = [aow2game];
+            main.components = [aow2.game];
             break;
         case "/sandals":
             main.components = sandalsComponents;
             break;
         case "/sandals1":
-            main.components = [ss1game];
+            main.components = [ss1.game];
             break;
         case "/sandals2":
-            main.components = [ss2game];
+            main.components = [ss2.game];
             break;
         case "/sandals3":
-            main.components = [ss3game];
+            main.components = [ss3.game];
             break;
         case "/jacksmith":
-            main.components = [jacksmithGame];
+            main.components = [jacksmith.game];
+            break;
+        case "/murder":
+            main.components = [murder.game];
+            break;
+        case "/bar":
+            main.components = [bar.game];
+            break;
+        case "/ragdoll":
+            main.components = [ragdoll.game];
+            break;
+        case "/sr":
+            main.components = [sr.game];
+            break;
+        case "/mdns":
+            main.components = [madness.game];
+            break;
+        case "/btd4":
+            main.components = [btd4.game];
             break;
     }
     let urlState = { url: url };
