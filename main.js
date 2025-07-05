@@ -1,133 +1,62 @@
-class component {
-    constructor(tag, properties, components, plaintext) {
-        if (plaintext == undefined) {
-            this.tag = tag;
-            this.properties = properties;
-            this.components = components;
-            this.componentText();
-        } else {
-            this.text = plaintext;
-        }
-    }
-    componentText() {
-        this.text = "<" + this.tag + " " + this.properties + ">";
-        for (let i = 0; i < this.components.length; i++) {
-            this.text += this.components[i].text + " ";
-        }
-        this.text += "</" + this.tag + ">";
-    }
-}
-function gameComponentGenerator(gameUrl) {
-    return new component(null, null, null, gameFrameGenerator(gameUrl));
-}
-function gameFrameGenerator(gameUrl) {
+function gameFrameGen(gameUrl) {
     return (
         '<iframe src="' +
         gameUrl +
         '" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0" frameborder="0" allow="gamepad *;"></iframe>'
     );
 }
-function finalGenerator(link, image) {
-    let imgComponent = new component(
-        "img",
-        'src="' + image + '" class="img"',
-        []
+
+function objectGen(localURL, photo) {
+    let imgStr = '<img src="images/' + photo + '.avif">';
+    return (
+        "<div><a onclick=\"redirect('" +
+        localURL +
+        "')\">" +
+        imgStr +
+        "</a></div>"
     );
-    let divLink = new component("a", link, [imgComponent]);
-    let divComponent = new component("div", "", [divLink]);
-    return divComponent;
 }
-function objectGenerator(link, image, game) {
-    let obj = {
-        component: finalGenerator(
-            "onclick=\"redirect('" + link + "')\"",
-            "images/" + image
-        ),
-        game: gameComponentGenerator(
-            "https://www.crazygames.com/embed/" + game
-        ),
-        url: link,
+
+function gameCard(localURL, photo, game) {
+    return {
+        game: gameFrameGen("https://www.crazygames.com/embed/" + game),
+        url: localURL,
+        obj: objectGen(localURL, photo),
     };
-    return obj;
 }
 
-let ss1 = objectGenerator("/sandals1", "sANDs.jpg", "swords-and-sandals-1");
-
-let ss2 = objectGenerator("/sandals2", "ss2.jpg", "swords-and-sandals-2");
-
-let ss3 = objectGenerator("/sandals3", "ss3.jpg", "swords-and-sandals-3");
-
-let mayhem1 = objectGenerator("/mayhem1", "gun_mayhem.jpg", "gun-mayhem");
-
-let mayhem2 = objectGenerator("/mayhem2", "gun_mayhem2.jpg", "gun-mayhem-2");
-
-let aow1 = objectGenerator("/aow1", "aow.jpg", "age-of-war");
-
-let aow2 = objectGenerator("/aow2", "aow2.jpg", "age-of-war-2");
-
-let jacksmith = objectGenerator("/jacksmith", "jacksmith.jpg", "jacksmith");
-
-let murder = objectGenerator("/murder", "murder.png", "murder");
-
-let bar = objectGenerator("/bar", "bar.png", "bartender-the-right-mix");
-
-let ragdoll = objectGenerator("/ragdoll", "ragdoll.png", "ragdoll-archers");
-
-let sr = objectGenerator("/sr", "sr.png", "soccer-random");
-
-let madness = objectGenerator("/mdns", "mdns.png", "madness-project-nexus");
-
-let btd4 = objectGenerator(
-    "/btd4",
-    "btd4.png",
-    "bloons-tower-defense-4-expansion"
-);
-
-let evowarsio = objectGenerator("/evowarsio", "evowarsio.png", "evowarsio");
-
-let sap = objectGenerator(
-    "/super-auto-pets",
-    "super-auto-pets.png",
-    "super-auto-pets"
-);
-
-let stick_war = objectGenerator("/stick-war", "stick-war.png", "stick-war");
-
-let hobo = objectGenerator("/hobo", "hobo.png", "hobo");
+function setDefaultMain() {
+    let tmp = '<div class="main">';
+    games.forEach((game) => {
+        tmp += game.obj;
+    });
+    tmp += "</div";
+    return tmp;
+}
 
 let games = [
-    mayhem1,
-    mayhem2,
-    aow1,
-    aow2,
-    ss1,
-    ss2,
-    ss3,
-    jacksmith,
-    murder,
-    bar,
-    ragdoll,
-    sr,
-    madness,
-    btd4,
-    evowarsio,
-    sap,
-    stick_war,
-    hobo,
+    gameCard("/mayhem1", "gun_mayhem", "gun-mayhem"),
+    gameCard("/mayhem2", "gun_mayhem2", "gun-mayhem-2"),
+    gameCard("/aow1", "aow", "age-of-war"),
+    gameCard("/aow2", "aow2", "age-of-war-2"),
+    gameCard("/sandals1", "sANDs", "swords-and-sandals-1"),
+    gameCard("/sandals2", "ss2", "swords-and-sandals-2"),
+    gameCard("/sandals3", "ss3", "swords-and-sandals-3"),
+    gameCard("/jacksmith", "jacksmith", "jacksmith"),
+    gameCard("/murder", "murder", "murder"),
+    gameCard("/bar", "bar", "bartender-the-right-mix"),
+    gameCard("/ragdoll", "ragdoll", "ragdoll-archers"),
+    gameCard("/sr", "sr", "soccer-random"),
+    gameCard("/mdns", "mdns", "madness-project-nexus"),
+    gameCard("/btd4", "btd4", "bloons-tower-defense-4-expansion"),
+    gameCard("/evowarsio", "evowarsio", "evowarsio"),
+    gameCard("/sap", "sap", "super-auto-pets"),
+    gameCard("/stick-war", "stick-war", "stick-war"),
+    gameCard("/hobo", "hobo", "hobo"),
 ];
 
-let mainComponents = [];
-games.forEach((e) => {
-    mainComponents.push(e.component);
-});
-
-let sandalsComponents = [ss1.component, ss2.component, ss3.component];
-let mayhemComponents = [mayhem1.component, mayhem2.component];
-let aowComponents = [aow1.component, aow2.component];
-
-let main = new component("div", 'class="main"', mainComponents);
+let main = "";
 let url = "/";
-let currentHTML = main.text;
 
 function redirect(newURL) {
     url = newURL;
@@ -135,21 +64,18 @@ function redirect(newURL) {
 }
 
 function setPage() {
-    main.componentText();
-    currentHTML = main.text;
-    document.getElementById("root").innerHTML = currentHTML;
+    document.getElementById("root").innerHTML = main;
 }
 
 function refresh(newPage) {
-    if (url == "/") main.components = mainComponents;
-    else
-        games.forEach((e) => {
-            if (url == e.url) {
-                main.components = [e.game];
+    if (url != "/")
+        games.forEach((game) => {
+            if (url == game.url) {
+                main = game.game;
             }
         });
-    let urlState = { url: url };
-    if (!newPage) history.pushState(urlState, "");
+    else main = setDefaultMain();
+    if (!newPage) history.pushState({ url: url }, "");
     setPage();
 }
 
