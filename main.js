@@ -1,8 +1,8 @@
 function gameFrameGen(gameUrl) {
     return (
-        '<iframe src="' +
+        '<iframe src="https://www.crazygames.com/embed/' +
         gameUrl +
-        '" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0" frameborder="0" allow="gamepad *;"></iframe>'
+        '" frameborder="0" allow="gamepad *;"></iframe>'
     );
 }
 
@@ -19,19 +19,10 @@ function objectGen(localURL, photo) {
 
 function gameCard(localURL, photo, game) {
     return {
-        game: gameFrameGen("https://www.crazygames.com/embed/" + game),
+        game: gameFrameGen(game),
         url: localURL,
         obj: objectGen(localURL, photo),
     };
-}
-
-function setDefaultMain() {
-    let tmp = '<div class="main">';
-    games.forEach((game) => {
-        tmp += game.obj;
-    });
-    tmp += "</div";
-    return tmp;
 }
 
 let games = [
@@ -63,10 +54,6 @@ function redirect(newURL) {
     refresh();
 }
 
-function setPage() {
-    document.getElementById("root").innerHTML = main;
-}
-
 function refresh(newPage) {
     if (url != "/")
         games.forEach((game) => {
@@ -74,9 +61,15 @@ function refresh(newPage) {
                 main = game.game;
             }
         });
-    else main = setDefaultMain();
+    else {
+        main = '<div class="main">';
+        games.forEach((game) => {
+            main += game.obj;
+        });
+        main += "</div";
+    }
     if (!newPage) history.pushState({ url: url }, "");
-    setPage();
+    html_body.innerHTML = main;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
